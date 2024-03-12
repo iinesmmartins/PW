@@ -1,5 +1,7 @@
+body{
+    background: rgb(29, 123, 129);
+}
 #img{
-    width: 50%;
     margin: auto;
     display: block;
     
