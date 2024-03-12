@@ -1,0 +1,41 @@
+p{
+    color:rgb(50, 150, 59);
+    text-align: center;  
+}
+
+#horario{
+    color: blueviolet;
+    text-align: center;                
+}
+
+.centrado{
+    text-align: center;
+}
+
+* {
+    text-align: center;
+    color: blue;
+}
+
+<!--
+body{
+    background-color: black;
+}
+-->
+
+<!-- linhas da tabela -->
+
+div{
+    background-color: green;
+    opacity: 0.3;
+} 
+
+
+body{
+    background-image: url(cartão.jpg);
+    background-repeat: repeat-x;
+}
+
+th{
+    font: italic;
+}

@@ -1,0 +1,36 @@
+#img{
+    width: 50%;
+    margin: auto;
+    display: block;
+    
+}
+h1{
+    text-align: center;
+    font: 40px "Comic Sans MS";
+    font-weight: 500;
+}
+h2{
+    text-align: center;
+    background-color: aliceblue;
+    font-size: 17px;
+    padding: 14px 40px;
+    border: 2px solid black;
+    width: 50%;
+    margin: auto;
+    display: block;
+}
+h3{
+    text-align: center;
+    background-color: aliceblue;
+    font-size: 17px;
+    padding: 14px 40px;
+    border: 2px solid black;
+    width: 50%;
+    margin: auto;
+    display: block;
+}
+h4{
+    text-align: center;
+    color: blue;
+}
+
