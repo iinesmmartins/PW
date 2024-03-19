@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JavaScript example</title>
+
+</head>
+<body>
+    <ul>
+        <li>aaa</li>
+        <li>aaa</li>
+        <li>aaa</li>
+    </ul>
+
+    <script>
+      // Seleciona todos os elementos <p>
+      var paragrafos = document.getElementsByTagName("li");
+
+      // Itera sobre a coleção de elementos <p> e modifica seu conteúdo
+      for (var i = 0; i < paragrafos.length; i++) {
+          paragrafos[i].innerHTML = i+1 + " - Este parágrafo foi modificado usando js!";
+      }
+    </script>
+</body>
+</html>
