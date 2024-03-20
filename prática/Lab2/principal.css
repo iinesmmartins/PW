@@ -1,5 +1,52 @@
-.body{
-    background-color: rgb(238, 202, 157);
-
+.botao1{
+    border: 2px solid black;
+    color: black;
+    box-shadow: 0 3px #666;
+    padding: auto;
+    text-align:center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 0px 250px;
 }
 
+h1{
+    margin-left:200px;
+    font-family: "Comic Sans MS"; 
+}
+
+div{
+    margin: auto;
+    font-family: "Comic Sans MS";
+}
+h2{
+    margin-left:15px;
+    font-family: "Comic Sans MS";
+}
+
+
+#trabalhos {
+    font-family: "Comic Sans MS";
+    font-size: 8;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #trabalhos td, #trabalhos th {
+    border: 2px solid black ;
+    padding: 7px;
+    text-align: center;
+  }
+  
+  #trabalhos tr:nth-child(even){background-color: #e2e0e0;}
+  
+  #trabalhos tr:hover {background-color: #dddddd;}
+  
+  #trabalhos th {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    text-align: center;
+    background-color: #09612baf;
+    color: rgb(255, 255, 255);
+  }
+
+  
