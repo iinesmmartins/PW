@@ -1,0 +1,28 @@
+{
+    "carros": [
+        {
+            "id": "2",
+            "Marca": "McLaren",
+            "Detalhes": "720s Spider",
+            "Foto": "https://uploads.diariodopoder.com.br/2022/08/01e5f9d4-2batch_mclaren-720s_spider-2019-1600-02-960x640.jpg"
+        },
+        {
+            "id": "3",
+            "Marca": "Honda",
+            "Detalhes": "Honda HR-V",
+            "Foto": "https://honda-automoveis.pt/www/uploads/carros/THUMBS-900x600-RESIZE/hr-v-900x600px-94.png"
+        },
+        {
+            "id": "1",
+            "Marca": "Ferrari",
+            "Detalhes": "F8",
+            "Foto": "https://www.motor24.pt/files/2019/03/1681733_Ferrari_F8_Tributo_4-800x533_c.jpg"
+        },
+        {
+            "id": "4",
+            "Marca": "Mercedes",
+            "Detalhes": "AMG vision gran turismo",
+            "Foto": "https://i.pinimg.com/originals/18/85/c3/1885c3871f6dc5aa49df75c88a2d8099.jpg"
+        }
+    ]
+}
