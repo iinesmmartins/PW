@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../Css/estilo.css">
+    <link rel="icon" href="../../Imagens/logo.jpg">
+    <script src="https://kit.fontawesome.com/a563638dec.js" crossorigin="anonymous"></script>
+    <title>MyTicket</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        .header {
+            background-color: #fff;
+            color: #333;
+            padding: 0.5rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .menu-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-right {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .menu-left a,
+        .menu-right a {
+            color: #333;
+            text-decoration: none;
+            margin: 0 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-left a img,
+        .menu-right a img {
+            width: 30px;
+        }
+
+        #cart-icon {
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        #cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 5px;
+            font-size: 12px;
+        }
+
+        main {
+            padding: 2rem;
+        }
+
+        .product,
+        .cart-item {
+            border: 1px solid #ddd;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background-color: #fff;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        #cart {
+            position: fixed;
+            top: 60px;
+            right: -300px;
+            width: 300px;
+            height: calc(100% - 60px);
+            background-color: white;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+            transition: right 0.3s;
+            padding: 1rem;
+            box-sizing: border-box;
+            z-index: 1000;
+        }
+
+        #cart.open {
+            right: 0;
+        }
+
+        #cart-items {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="header-container">
+            <div class="menu-left">
+                <a href="#"><img src="../../Imagens/icons8-cardápio-30.png" alt="Menu" id="navegacao"></a>
+            </div>
+            <div class="menu-right">
+                <a href="#"><img src="../../Imagens/icons8-usuário-de-gênero-neutro-32.png" alt="Perfil" id="perfil"></a>
+                <a href="#" id="cart-icon"><img src="../../Imagens/icons8-carrinho-30.png" alt="Carrinho"><span id="cart-count">0</span></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Modal de login-->
+    <div id="modal-container" class="modal-container">
+        <div class="modal">
+            <span class="close-button">&times;</span>
+            <img src="../../Imagens/logo.jpg" alt="Logo" class="admin">
+            <h2>Login</h2>
+            <form id="login">
+                <label for="username">Email:</label><br>
+                <input type="email" id="email" name="email"><br>
+                <label for="password">Password:</label><br>
+                <input type="password" id="password" name="password"><br>
+                <a href="criarconta.html">Criar Conta</a>
+                <input type="button" value="Login" class="botaolog" onclick="login()">
+            </form>
+        </div>
+    </div>
+
+    <!-- Barra de navegação lateral-->
+    <div class="nav-menu" id="navMenu">
+        <div class="search_container">
+            <input type="search" id="search" name="q" placeholder="Pesquisar...">
+            <button type="submit" id="search-button"><i class="fas fa-search"></i></button>
+        </div>
+        <ul>
+            <li>
+                <h2>CATEGORIAS</h2>
+            </li>
+            <li><a href="#">Desporto</a></li>
+            <li><a href="#">Cultura</a></li>
+            <li><a href="#">Música</a></li>
+            <li><a href="#">Arte</a></li>
+            <li><a href="#">Educação</a></li>
+            <li><a href="#">Viagens</a></li>
+            <li><a href="#">Tecnologia</a></li>
+        </ul>
+    </div>
+
+    <h3 class="titulo">Próximos Eventos</h3>
+    <section class="eventos" id="eventosContainer">
+        <!-- Conteúdo da seção de eventos será inserido dinamicamente -->
+    </section>
+
+    <!-- Modal com informações de cada evento -->
+    <div id="myModal" class="modal-eventos">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="caption">
+            <h3 id="modalNome"></h3>
+            <p id="modalData"></p>
+            <p id="modalLocal"></p>
+            <p id="modalDescricao"></p>
+            <p id="modalPreco"></p>
+            <button class="botao" id="comprarBilhete" onclick="addToCart()">Adicionar ao Carrinho</button>
+        </div>
+    </div>
+
+    <a href="#" class="botao-voltar-topo" id="botaoVoltarTopo"><i class="fa-solid fa-up-long"></i></a>
+
+    <!-- Carrinho de compras -->
+    <div id="cart" class="cart">
+        <h2>Seu Carrinho</h2>
+        <div id="cart-items"></div>
+        <button onclick="showCheckout()">Finalizar Compra</button>
+    </div>
+
+    <!-- Rodape do site-->
+    <footer>
+        <div class="menu">
+            <ul>
+                <li><a href="index.html">Página Inicial</a></li>
+            </ul>
+        </div>
+        <div class="empresa">
+            <h3>Sobre Nossa Empresa</h3>
+            <p>A MyTicket é uma plataforma líder na venda de bilhetes para uma ampla variedade de eventos.<br>Desde
+                grandes festivais até eventos locais, estamos aqui para conectar você aos melhores momentos.</p>
+        </div>
+        <div class="copy">
+            &copy; 2024 MyTicket. Todos os direitos reservados.
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', function () {
+            var botaoVoltarTopo = document.getElementById('botaoVoltarTopo');
+
+            // Mostra o botão quando o usuário rolar a página para baixo
+            if (window.scrollY > 100) {
+                botaoVoltarTopo.style.display = 'block';
+            } else {
+                botaoVoltarTopo.style.display = 'none';
+            }
+        });
+
+        // Função para rolar a página de volta ao topo
+        function voltarAoTopo() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        document.getElementById('perfil').addEventListener('click', function () {
+            document.getElementById('modal-container').style.display = 'block';
+        });
+
+        document.querySelector('.close-button').addEventListener('click', function () {
+            document.getElementById('modal-container').style.display = 'none';
+        });
+
+        window.addEventListener('click', function (event) {
+            if (event.target == document.getElementById('modal-container')) {
+                document.getElementById('modal-container').style.display = 'none';
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var navegacaoImg = document.getElementById("navegacao");
+            var navMenu = document.getElementById("navMenu");
+
+            // Função para fechar o menu
+            function fecharMenu() {
+                navMenu.classList.remove("open");
+                document.body.classList.remove("menu-aberto");
+            }
+
+            // Abrir o menu quando a imagem de navegação for clicada
+            navegacaoImg.addEventListener("click", function () {
+                navMenu.classList.toggle("open");
+                document.body.classList.toggle("menu-aberto");
+            });
+
+            // Fechar o menu quando clicar fora dele
+            document.addEventListener("click", function (event) {
+                var clicadoDentroMenu = navMenu.contains(event.target);
+                var clicadoNoIconeNavegacao = navegacaoImg.contains(event.target);
+                if (!clicadoDentroMenu && !clicadoNoIconeNavegacao) {
+                    fecharMenu();
+                }
+            });
+        });
+
+        const login = async () => {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            // Validação de entrada
+            if (!email || !password) {
+                alert("Por favor, preencha todos os campos de login.");
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:8080/auth/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Erro ao fazer login.");
+                }
+
+                const dados = await response.json();
+                alert("Login efetuado com sucesso.");
+
+                // Guardar o token no armazenamento local de forma segura
+                localStorage.setItem("token", dados.token);
+
+                // Verificar se o usuário é administrador e redirecionar
+                if (dados.isAdmin) {
+                    window.location.href = "/admin"; // Redireciona para a página de admin
+                } else {
+                    window.location.href = "/dashboard"; // Redireciona para a página normal do usuário
+                }
+            } catch (error) {
+                console.error("Erro durante o login:", error);
+                alert("Erro durante o login. Por favor, tente novamente mais tarde.");
+            }
+        };
+
+        const getProtectedData = async () => {
+            const token = localStorage.getItem('token');
+
+            const response = await fetch("http://localhost:8080/admin", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": Bearer ${token}
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+            } else {
+                console.error('Não está autorizado');
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const eventosContainer = document.getElementById('eventosContainer');
+
+            // Fazendo uma requisição AJAX para carregar os eventos do backend
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://localhost:8080/eventos/listar', true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    const eventos = JSON.parse(xhr.responseText);
+                    eventos.forEach(evento => {
+                        const cardEvento = `
+                            <div class="card-evento">
+                                <img src="${evento.Foto}" alt="${evento.nome}">
+                                <h3>${evento.nome}</h3>
+                                <p>${evento.descricao || 'Descrição não disponível'}</p>
+                                <button class="botao" id="mais" onclick="openModal(${evento.id})">Ver mais</button>
+                            </div>
+                        `;
+                        eventosContainer.innerHTML += cardEvento;
+                    });
+                } else {
+                    console.error('Falha ao carregar os eventos.');
+                }
+            };
+            xhr.send();
+        });
+
+        function openModal(eventId) {
+            fetch(http://localhost:8080/eventos/listar/${eventId})
+                .then(response => response.json())
+                .then(evento => {
+                    // Formatar a data do evento
+                    const dataFormatada = new Date(evento.data).toLocaleDateString('pt-BR', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                    });
+
+                    // Preencha os dados do modal com as informações do evento
+                    document.getElementById('modalNome').textContent = evento.nome;
+                    document.getElementById('modalData').textContent = Data: ${dataFormatada};
+                    document.getElementById('modalLocal').textContent = Local: ${evento.localizacao};
+                    document.getElementById('modalDescricao').textContent = Descrição: ${evento.descricao};
+
+                    // Aqui você fará outra requisição para buscar os detalhes do bilhete associado ao evento
+                    fetch(http://localhost:8080/bilhetes/evento/${eventId})
+                        .then(response => response.json())
+                        .then(bilhete => {
+                            document.getElementById('modalPreco').textContent = Preço: ${bilhete.preco} €;
+                            document.getElementById('comprarBilhete').onclick = () => addToCart(eventId, evento.nome, bilhete.preco);
+                        })
+                        .catch(error => {
+                            console.error("Erro ao buscar os detalhes do bilhete:", error);
+                        });
+
+                    // Exiba o modal
+                    document.getElementById('myModal').style.display = 'block';
+                })
+                .catch(error => {
+                    console.error("Erro ao buscar os detalhes do evento:", error);
+                });
+        }
+
+        function closeModal() {
+            // Oculte o modal
+            document.getElementById('myModal').style.display = 'none';
+        }
+
+        let cartItems = [];
+        let selectedEventId = null;
+
+        function showHome() {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <h1>Próximos Eventos</h1>
+                <div class="product">
+                    <h3>Evento 1</h3>
+                    <p>Descrição do Evento 1</p>
+                    <p>R$100.00</p>
+                    <button onclick="addToCart(1, 'Evento 1', 100.00)">Adicionar ao Carrinho</button>
+                </div>
+                <div class="product">
+                    <h3>Evento 2</h3>
+                    <p>Descrição do Evento 2</p>
+                    <p>R$150.00</p>
+                    <button onclick="addToCart(2, 'Evento 2', 150.00)">Adicionar ao Carrinho</button>
+                </div>
+            `;
+        }
+
+        function showCart() {
+            toggleCart();
+        }
+
+        function showCheckout() {
+            const content = document.getElementById('content');
+            const total = cartItems.reduce((acc, item) => acc + item.price, 0);
+            content.innerHTML = `
+                <h1>Checkout</h1>
+                <p>Total: R$${total.toFixed(2)}</p>
+                <button onclick="placeOrder()">Finalizar Compra</button>
+            `;
+        }
+
+        function addToCart(id, name, price) {
+            cartItems.push({ id, name, price });
+            updateCart();
+            alert(${name} adicionado ao carrinho);
+        }
+
+        function removeFromCart(id) {
+            cartItems = cartItems.filter(item => item.id !== id);
+            updateCart();
+        }
+
+        function updateCart() {
+            const cartCount = document.getElementById('cart-count');
+            cartCount.textContent = cartItems.length;
+
+            const cartItemsContainer = document.getElementById('cart-items');
+            cartItemsContainer.innerHTML = '';
+            cartItems.forEach(item => {
+                const div = document.createElement('div');
+                div.classList.add('cart-item');
+                div.innerHTML = `
+                    <h3>${item.name}</h3>
+                    <p>R$${item.price.toFixed(2)}</p>
+                    <button onclick="removeFromCart(${item.id})">Remover</button>
+                `;
+                cartItemsContainer.appendChild(div);
+            });
+        }
+
+        function toggleCart() {
+            const cart = document.getElementById('cart');
+            cart.classList.toggle('open');
+        }
+
+        function placeOrder() {
+            alert('Pedido realizado com sucesso!');
+            cartItems = [];
+            updateCart();
+            showHome();
+        }
+
+        document.getElementById('cart-icon').addEventListener('click', toggleCart);
+
+        // Inicializa a página inicial
+        document.addEventListener("DOMContentLoaded", showHome);
+    </script>
+
+</html>

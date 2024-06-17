@@ -1,0 +1,25 @@
+<script>
+const atualizarEventos = async () => {
+    let strHtml = ``;
+    //alert("aaaa")
+    const response = await fetch("http://localhost:8080/eventos"); //??
+    const lv = await response.json();
+    for (const artigo of lv) {
+      strHtml += `
+          <div class="col-md-6">
+            <div class="card" >
+              <img class="card-img-top" src="${artigo.foto}" alt="${artigo.nome}">
+              <div class="card-img-overlay">
+                <h4 class="card-title">${artigo.nome}</h4>
+                <a href="#" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#myModal"  onclick="carregaModal('${artigo.nome}', 
+                 ${artigo.data}, ${artigo.localização}, '${artigo.detalhes}', '${artigo.preço}', '${artigo.quantidade}',
+                  '${artigo.categoria}', this)">Ver mais informação</a>
+              </div>
+            </div> 
+          </div>     
+               `;
+    }
+    document.getElementById("cardEventos").innerHTML = strHtml;
+  };
+  atualizarEventos();
+  </script>

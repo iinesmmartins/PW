@@ -1,0 +1,110 @@
+<script>
+
+openModal(eventId) {
+    fetch(`http://localhost:8080/eventos/listar/${eventId}`)
+        .then(response => response.json())
+        .then(evento => {
+            const dataFormatada = new Date(evento.data).toLocaleDateString('pt-PT', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+            });
+
+            // Preencha os dados do modal com as informações do evento
+            document.getElementById('modalNome').textContent = evento.nome;
+            document.getElementById('modalData').textContent = `Data: ${dataFormatada}`;
+            document.getElementById('modalLocal').textContent = `Local: ${evento.localizacao}`;
+            document.getElementById('modalDescricao').textContent = `Descrição: ${evento.descricao}`;
+            document.getElementById('modalPreco').textContent = `Preço: ${evento.preco} €`;
+
+            // Exiba o modal
+            document.getElementById('myModal').style.display = 'block';
+        })
+        .catch(error => {
+            console.error("Erro ao buscar os detalhes do evento:", error);
+        });
+}
+
+function closeModal() {
+    // Oculte o modal
+    document.getElementById('myModal').style.display = 'none';
+}
+
+
+function abrirmodalcarrinho() {
+    var modal = document.getElementById("modalCarrinho");
+    modal.style.display = "block";
+}
+
+function adicionarItemAoCarrinho(eventId) {
+    fetch(`http://localhost:8080/eventos/listar/${eventId}`)
+        .then(response => response.json())
+        .then(evento => {
+            // Suponha que você tenha os campos do formulário (eventoId e quantidade) preenchidos
+            const eventoId = evento.id;
+            const quantidade = parseInt(document.getElementById('quantidade').value);
+
+            // Valide os dados de entrada (por exemplo, verifique se a quantidade é um número válido)
+
+            // Crie um objeto com os dados do item a ser adicionado
+            const item = {
+                eventoId: eventoId,
+                quantidade: quantidade
+            };
+
+            // Envie o item para o servidor (você precisará configurar a rota no servidor para lidar com isso)
+            fetch('/carrinho/adicionar-item/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(item)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Item adicionado com sucesso:', data);
+                closeModal(); // Feche o modal após adicionar o item
+            })
+            .catch(error => {
+                console.error('Erro ao adicionar o item:', error);
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao buscar os detalhes do evento:', error);
+        });
+}
+
+function closeModal() {
+    // Oculte o modal
+    document.getElementById('myModal').style.display = 'none';
+}
+
+
+document.addEventListener('DOMContentLoaded', function () {
+        
+        const eventosContainer = document.getElementById('eventosContainer');
+
+        // Fazendo uma requisição AJAX para carregar os eventos do backend
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://localhost:8080/eventos/listar', true);
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                const eventos = JSON.parse(xhr.responseText);
+                eventos.forEach(evento => {
+                    const cardEvento = `
+                    <div class="card-evento">
+                        <img src="${evento.foto}" alt="${evento.nome}">
+                        <h3>${evento.nome}</h3>
+                        <p>${evento.descricao || 'Descrição não disponível'}</p>
+                        <button class="botao" id="mais" onclick="openModal(${evento.id})">Ver mais</button>
+                    </div>
+                `;
+                    eventosContainer.innerHTML += cardEvento;
+                });
+            } else {
+                console.error('Falha ao carregar os eventos.');
+            }
+        };
+        xhr.send();
+    });
+</script> 

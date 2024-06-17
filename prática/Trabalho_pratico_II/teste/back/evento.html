@@ -1,0 +1,39 @@
+
+<script>
+const atualizarEventos = async () => {
+    var dados = {
+      id: document.getElementById("muId").value,
+      nome: document.getElementById("munome").value,
+      detalhes: document.getElementById("mudetalhes").value,
+      foto: document.getElementById("mufoto").value,
+      data: document.getElementById("mudata").value, 
+      localizacao: document.getElementById("mulocalizacao").value,
+      preco: document.getElementById("mupreco").value,
+      quantidade: document.getElementById("muquantidade").value,
+      categoria: document.getElementById("mucategoria").value,
+    };
+    fetch("http://localhost:8080/api/eventos/editar", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dados),
+    })
+      .then((response) => {
+        // Verifica se a resposta foi bem sucedida
+        if (!response.ok) {
+          throw new Error("Erro ao obter os dados do evento.");
+        }
+        // Converte a resposta para JSON
+        return response.json();
+      })
+      .then((dados) => {
+        // Atualiza os dados do evento
+        resposta = "O evento selecionado, com nome: " + dados.nome + " foi atualizado com sucesso!";
+        alert(resposta);
+        listarEventos();
+      })
+      .catch((error) => {
+        // Captura qualquer erro de rede ou tratamento de erro
+        console.error("Houve um erro:", error);
+      });
+  };
+</script>
